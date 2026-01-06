@@ -106,8 +106,8 @@ const TrapTheCat: React.FC<TrapTheCatProps> = ({ onBack }) => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-4">
-      <div className="flex justify-between w-full max-w-sm mb-4 items-center">
+    <div className="flex flex-col items-center justify-center min-h-screen w-full p-4">
+      <div className="flex justify-between w-full max-w-2xl mb-4 items-center px-2">
         <button onClick={onBack} className="p-2 text-slate-400 hover:text-white transition-colors">
           <i className="fas fa-arrow-left"></i>
         </button>
@@ -117,8 +117,8 @@ const TrapTheCat: React.FC<TrapTheCatProps> = ({ onBack }) => {
         </button>
       </div>
 
-      <div className="relative p-2 bg-slate-800 rounded-2xl shadow-2xl overflow-hidden mb-6">
-        <div className="hex-grid" style={{ width: '320px' }}>
+      <div className="relative p-4 bg-slate-800 rounded-2xl shadow-2xl mb-6 w-full max-w-xl">
+        <div className="hex-grid w-full">
           {grid.map((isWall, idx) => {
             const isCat = idx === catPos;
             const row = Math.floor(idx / GRID_SIZE);
@@ -128,13 +128,12 @@ const TrapTheCat: React.FC<TrapTheCatProps> = ({ onBack }) => {
               <div
                 key={idx}
                 onClick={() => handleCellClick(idx)}
-                className={`hex cursor-pointer flex items-center justify-center transition-all transform active:scale-90
+                className={`hex cursor-pointer flex items-center justify-center transition-all active:scale-90
                   ${isEven ? 'translate-x-[50%]' : ''}
-                  ${isCat ? 'bg-orange-500 z-10' : isWall ? 'bg-slate-600' : 'bg-slate-300 hover:bg-slate-400'}
+                  ${isCat ? 'bg-orange-500 z-10 scale-110' : isWall ? 'bg-slate-600' : 'bg-slate-300 hover:bg-slate-400'}
                 `}
-                style={{ width: '28px', height: '28px' }}
               >
-                {isCat && <i className="fas fa-cat text-white text-[12px]"></i>}
+                {isCat && <i className="fas fa-cat text-white text-lg"></i>}
               </div>
             );
           })}
