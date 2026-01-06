@@ -1,0 +1,54 @@
+
+name: Build and Sync GameHub
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - 'build/**' # Jangan jalankan workflow jika hanya folder build yang berubah
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Build Project
+        run: npm run build
+
+      - name: Commit and Push Build Folder
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # Paksa tambahkan folder build meskipun ada di gitignore (jika ada)
+          git add build/ -f
+          
+          # Cek apakah ada perubahan yang perlu dicommit
+          if [ -n "$(git status --porcelain build/)" ]; then
+            git commit -m "chore: automated production build [skip ci]"
+            
+            # Ambil perubahan terbaru dari remote untuk menghindari konflik push
+            git pull origin main --rebase
+            
+            git push origin main
+          else
+            echo "No changes in build folder to commit."
+          fi
